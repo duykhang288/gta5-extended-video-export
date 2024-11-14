@@ -2,21 +2,7 @@ version: 1.0.{build}
 install:
   - git submodule update --init --recursive
   - nuget restore
-  - pushd gta5-extended-video-export
-  - ps: |
-      # Download the ScriptHookV SDK
-      $sdkUrl = 'http://www.dev-c.com/files/ScriptHookV_SDK_1.0.3337.0.zip'
-      $outputFile = 'sdk.zip'
-      Invoke-WebRequest -Uri $sdkUrl -OutFile $outputFile -UseBasicParsing
-      
-      # Check if the downloaded file is a valid ZIP archive
-      if ((Get-Item $outputFile).Length -lt 100KB) {
-          Write-Error "Downloaded file is too small. It may not be the SDK."
-          Get-Content $outputFile | Select-Object -First 20
-          exit 1
-      }
-  - 7z x sdk.zip -osdk
-  - popd
+  - pushd gta5-extended-video-export && appveyor DownloadFile http://reshade.me/downloads/ScriptHookV_SDK_1.0.617.1a.zip -FileName sdk.zip && 7z x sdk.zip & popd
 platform: x64
 configuration: Release
 build:
@@ -25,8 +11,7 @@ build:
 after_build:
   - pushd x64\Release
   - mkdir EVE\dlls
-  - ps: Move-Item -Path ".\YourProject.dll" -Destination ".\YourProject.asi"
-  - ps: Move-Item -Path ".\YourProject.asi" -Destination .\EVE\dlls
+  - ps: Move-Item -Path ".\*.dll" -Destination .\EVE\dlls
   - dir /s /b *.asi EVE
   - 7z a -r ..\..\ExtendedVideoExport-git-%APPVEYOR_BUILD_VERSION%.zip *.asi EVE
 test: off
