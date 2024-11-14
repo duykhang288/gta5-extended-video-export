@@ -3,7 +3,18 @@ install:
   - git submodule update --init --recursive
   - nuget restore
   - pushd gta5-extended-video-export
-  - appveyor DownloadFile https://www.dev-c.com/gtav/scripthookv/scripthookv_sdk.zip -FileName sdk.zip
+  - ps: |
+      # Download the ScriptHookV SDK
+      $sdkUrl = 'https://www.dev-c.com/gtav/scripthookv/scripthookv_sdk.zip'
+      $outputFile = 'sdk.zip'
+      Invoke-WebRequest -Uri $sdkUrl -OutFile $outputFile -UseBasicParsing
+      
+      # Check if the downloaded file is a valid ZIP archive
+      if ((Get-Item $outputFile).Length -lt 100KB) {
+          Write-Error "Downloaded file is too small. It may not be the SDK."
+          Get-Content $outputFile | Select-Object -First 20
+          exit 1
+      }
   - 7z x sdk.zip -osdk
   - popd
 platform: x64
