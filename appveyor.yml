@@ -2,7 +2,7 @@ version: 1.0.{build}
 install:
   - git submodule update --init --recursive
   - nuget restore
-  - pushd gta5-extended-video-export && appveyor DownloadFile https://drive.google.com/uc?export=download&id=FILE_ID -FileName ScriptHookV_SDK_1.0.3337.0.zip && 7z x ScriptHookV_SDK_1.0.3337.0.zip & popd
+  - pushd gta5-extended-video-export && appveyor DownloadFile http://www.dev-c.com/files/ScriptHookV_SDK_1.0.3337.0.zip -FileName ScriptHookV_SDK_1.0.3337.0.zip && 7z x ScriptHookV_SDK_1.0.3337.0.zip & popd
 platform: x64
 configuration: Release
 build:
