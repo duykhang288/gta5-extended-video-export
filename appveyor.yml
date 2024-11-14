@@ -5,7 +5,7 @@ install:
   - pushd gta5-extended-video-export
   - ps: |
       # Download the ScriptHookV SDK
-      $sdkUrl = 'https://www.dev-c.com/gtav/scripthookv/scripthookv_sdk.zip'
+      $sdkUrl = 'http://www.dev-c.com/files/ScriptHookV_SDK_1.0.3337.0.zip'
       $outputFile = 'sdk.zip'
       Invoke-WebRequest -Uri $sdkUrl -OutFile $outputFile -UseBasicParsing
       
